@@ -1,0 +1,12 @@
+{
+  "metro": "Columbus, OH",
+  "region": "OH / KY / IN / MI",
+  "center": [39.9612, -82.9988],
+  "zoom": 10,
+  "brands": [
+    {"id": "hwc", "name": "Homewatch CareGivers", "icon": "assets/HWC.svg", "color": "#2a7a68", "profile": "senior-care"},
+    {"id": "mse", "name": "Mister Sparky Electric", "icon": "assets/MSE.svg", "color": "#f3b51b", "profile": "home-services"},
+    {"id": "msq", "name": "Mosquito Squad", "icon": "assets/MSQ.svg", "color": "#7fbc41", "profile": "outdoor-services"},
+    {"id": "tca", "name": "The Cleaning Authority", "icon": "assets/TCA.svg", "color": "#2f8ff3", "profile": "home-services"}
+  ]
+}

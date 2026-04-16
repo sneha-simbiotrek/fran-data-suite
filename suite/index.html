@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authority Brands — Territory Intelligence Suite</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+
+    <!-- ═══ TOP BAR ═══ -->
+    <header class="topbar">
+      <div class="brand-lockup">
+        <img src="assets/authority_brand_logo.svg" alt="Authority Brands" class="ab-logo" />
+        <div class="lockup-text">
+          <div class="eyebrow">Territory Intelligence</div>
+          <h1>Demo Suite</h1>
+        </div>
+      </div>
+
+      <div class="topbar-center">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="locationInput" type="text" placeholder="Search city or ZIP…" autocomplete="off" />
+          <div id="locationPopup" class="location-popup"></div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="mode-switch" id="modeSwitch">
+          <button class="mode-btn is-active" data-mode="availability">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Availability
+          </button>
+          <button class="mode-btn" data-mode="penetration">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            Penetration
+          </button>
+          <button class="mode-btn" data-mode="ranker">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+            Opportunity
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══ MAIN LAYOUT ═══ -->
+    <main class="layout">
+
+      <!-- MAP -->
+      <section class="map-col">
+        <div class="map-shell">
+          <div id="map"></div>
+
+          <!-- CLOCKFACE (lives inside map container) -->
+          <div id="clockface" class="clockface hidden">
+            <div class="clockface-ring"></div>
+            <div class="clockface-pulse"></div>
+            <div class="clockface-brands" id="clockfaceBrands"></div>
+            <div class="clockface-label" id="clockfaceLabel">Select a brand</div>
+          </div>
+
+          <!-- FLOATING LEGEND -->
+          <div class="floating-legend" id="floatingLegend"></div>
+
+          <!-- MAP CONTROLS -->
+          <div class="map-controls">
+            <button class="map-ctrl-btn" id="resetViewBtn" title="Reset view">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            </button>
+            <button class="map-ctrl-btn" id="exportBtn" title="Export PDF report">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STATS BAR under map -->
+        <div class="stats-bar" id="statsBar"></div>
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+
+        <!-- ACTIVE BRAND CARD -->
+        <div class="panel brand-card" id="brandCard">
+          <div class="brand-card-inner" id="brandCardInner">
+            <div class="bc-placeholder">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              <span>Search a city to open the brand selector</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE INFO -->
+        <div class="panel" id="modePanel">
+          <div class="panel-header">
+            <h3 id="modeTitle">Availability Checker</h3>
+          </div>
+          <p id="modeDescription" class="muted-text"></p>
+        </div>
+
+        <!-- SUMMARY METRICS -->
+        <div class="panel" id="summaryPanel">
+          <h3>Market Summary</h3>
+          <div class="metric-grid" id="summaryMetrics"></div>
+        </div>
+
+        <!-- ZIP DETAILS -->
+        <div class="panel" id="detailsPanel">
+          <h3 id="detailsTitle">Selection Details</h3>
+          <div id="detailsContent" class="details-content"></div>
+        </div>
+
+        <!-- AI ADVISOR (the magic) -->
+        <div class="panel ai-panel" id="aiPanel" style="display:none">
+          <div class="panel-header">
+            <div class="ai-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              AI Territory Advisor
+            </div>
+          </div>
+          <div id="aiContent" class="ai-content">
+            <div class="ai-placeholder">Click a ZIP in Opportunity mode to get AI-powered expansion advice.</div>
+          </div>
+        </div>
+
+        <!-- RANKING LIST -->
+        <div class="panel" id="rankingPanel" style="display:none">
+          <div class="panel-header">
+            <h3>Top Opportunities</h3>
+            <button class="btn btn-ghost btn-sm" id="rerankBtn">Refresh</button>
+          </div>
+          <div id="rankingList" class="ranking-list"></div>
+        </div>
+
+      </aside>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
